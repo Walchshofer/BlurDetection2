@@ -1,7 +1,7 @@
 # Blur Detection
 
 This is a **modified** version of [WillBrennan's BlurDetection2](https://github.com/WillBrennan/BlurDetection2), modified to:
-1. Save blur map images and drop requirement of json extension in save path (along with json file, when `--save-path` is set).
+1. Save blur map images (pretty & unpretty) along with json file when `--save-path` is set.
 2. Drop .requirement of json extension from --save-path, as it also saves images: input `--save-path` value without extension.
 3. Adapt to Google Colaboratory Jupyter Notebook environment (which is incompatible with e.g. `cv2.imshow()` ).
 
