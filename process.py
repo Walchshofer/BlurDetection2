@@ -5,11 +5,11 @@ import pathlib
 import json
 
 import cv2
+from google.colab.patches import cv2_imshow
 
 from blur_detection import estimate_blur
 from blur_detection import fix_image_size
 from blur_detection import pretty_blur_map
-
 
 def parse_args():
     parser = argparse.ArgumentParser(description='run blur detection on a single image')
@@ -54,8 +54,9 @@ if __name__ == '__main__':
     logging.info(f'fix_size: {fix_size}')
 
     if args.save_path is not None:
-        save_path = pathlib.Path(args.save_path)
-        assert save_path.suffix == '.json', save_path.suffix
+        # save_path = pathlib.Path(args.save_path)
+        # assert save_path.suffix == '.json', save_path.suffix
+        save_path = args.save_path
     else:
         save_path = None
 
@@ -80,14 +81,25 @@ if __name__ == '__main__':
         results.append({'input_path': str(image_path), 'score': score, 'blurry': blurry})
 
         if args.display:
-            cv2.imshow('input', image)
-            cv2.imshow('result', pretty_blur_map(blur_map))
+            print('Display images')
+            cv2_imshow('input', image)
+            cv2_imshow('result', pretty_blur_map(blur_map))
+            cv2_imshow('result', blur_map)
 
-            if cv2.waitKey(0) == ord('q'):
-                logging.info('exiting...')
-                exit()
+            # if cv2.waitKey(0) == ord('q'):
+            #     logging.info('exiting...')
+            #     exit()
 
     if save_path is not None:
+
+        logging.info(f'saving image {save_path}_pretty_blur_map.png')
+        cv2.imwrite(save_path+'_pretty_blur_map.png', pretty_blur_map(blur_map))
+
+        logging.info(f'saving image {save_path}_blur_map.png')
+        cv2.imwrite(save_path+'_blur_map.png', blur_map)
+
+        save_path = save_path+'.json'
+
         logging.info(f'saving json to {save_path}')
 
         with open(save_path, 'w') as result_file:
